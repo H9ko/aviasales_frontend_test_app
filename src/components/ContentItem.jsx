@@ -1,22 +1,26 @@
 import React from 'react';
 import Flight from './Flight';
 import css from './ContentItems.module.css';
-import { ReactComponent as Logo } from '../assets/logo.svg';
 
-const ContentItem = () => (
-  <div className={css.item}>
-    <div className={css.header}>
-      <div className={css.price}> 13 400 Р</div>
-      <div className={css.logo}>
-        <Logo />
-        Airlines
+const ContentItem = ({ ticket }) => {
+  console.log('ContentItem -> ticket', ticket);
+
+  return (
+    <div className={css.item}>
+      <div className={css.header}>
+        <div className={css.price}>
+          {`${ticket.price} Р`}
+        </div>
+        <div className={css.logo}>
+          <img src={`//pics.avs.io/99/36/${ticket.carrier}.png`} alt="logo"/>
+        </div>
+      </div>
+      <div>
+        <Flight flight={ticket.segments[0]} />
+        <Flight flight={ticket.segments[1]} />
       </div>
     </div>
-    <div>
-      <Flight />
-      <Flight />
-    </div>
-  </div>
-);
+  );
+};
 
 export default ContentItem;

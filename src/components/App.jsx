@@ -1,33 +1,13 @@
 import React from 'react';
 import './App.css';
+import { useSelector } from 'react-redux';
 import { ReactComponent as Logo } from '../assets/logo.svg';
 import CheckBox from './CheckBox';
 import ButtonGroup from './ButtonGroup';
 import ContentItems from './ContentItems';
 
-const transferOptions = [
-  {
-    text: 'Все',
-    name: 'all',
-  },
-  {
-    text: 'Без пересадок',
-    name: 'none',
-  },
-  {
-    text: '1 пересадка',
-    name: '1transfer',
-  },
-  {
-    text: '2 пересадки',
-    name: '2transfer',
-  },
-  {
-    text: '3 пересадки',
-    name: '3transfer',
-  },
-];
 function App() {
+  const checkBoxs = useSelector((state) => state.filters.checkBoxs);
   return (
     <div className="page">
       <div className="header">
@@ -36,7 +16,7 @@ function App() {
       <div className="main">
         <div className="main__aside">
           <div className="main__title">КОЛИЧЕСТВО ПЕРЕСАДОК</div>
-          {transferOptions.map(({ text, name }) => <CheckBox text={text} name={name} />)}
+          {checkBoxs.map(({ name }) => <CheckBox key={name} name={name} />)}
         </div>
         <div className="main__content">
           <ButtonGroup />
