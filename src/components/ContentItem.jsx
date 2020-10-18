@@ -9,15 +9,15 @@ const ContentItem = ({ ticket }) => {
     <div className={css.item}>
       <div className={css.header}>
         <div className={css.price}>
-          {`${ticket.price} Р`}
+          {`${new Intl.NumberFormat('ru-RU').format(ticket.price)} Р`}
         </div>
         <div className={css.logo}>
-          <img src={`//pics.avs.io/99/36/${ticket.carrier}.png`} alt="logo"/>
+          <img src={`//pics.avs.io/99/36/${ticket.carrier}.png`} alt="logo" />
         </div>
       </div>
       <div>
-        <Flight flight={ticket.segments[0]} />
-        <Flight flight={ticket.segments[1]} />
+        <Flight key={0} flight={ticket.segments[0]} />
+        <Flight key={1} flight={ticket.segments[1]} />
       </div>
     </div>
   );

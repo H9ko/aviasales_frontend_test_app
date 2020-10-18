@@ -3,9 +3,8 @@ import { DateTime, Duration } from 'luxon';
 import css from './Flight.module.css';
 
 const Flight = ({ flight }) => {
-  console.log('Flight -> flight', flight);
   const {
-    origin, destination, date, duration, stops
+    origin, destination, date, duration, stops,
   } = flight;
   const dataStart = DateTime.fromISO(date);
   const msInMinute = 60 * 1000;
