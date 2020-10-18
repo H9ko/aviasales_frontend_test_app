@@ -5,19 +5,23 @@ import ContentItem from './ContentItem';
 import styles from './ContentItems.module.css';
 
 const ContentItems = () => {
-  const tickets = useSelector((state) => state.tickets);
+  const tickets = useSelector((state) => state.tickets.slice(0, 5));
   const checkBoxs = useSelector((state) => state.filters.checkBoxs);
-  const testTickets = tickets.slice(0, 5);
+
   const isChecked = R.propEq('checked', true);
-  const createCondition = (el) => (ticket) => (el.length
-    === ticket.segments[0].stops.length && el.length
-    === ticket.segments[1].stops.length) || el.length === 999;
-  const getUnionCondition = R.pipe(
+  const createConditions = (transfers) => (ticket) => {
+    const mathInFirst = R.includes(ticket.segments[0].stops.length, transfers);
+    const matchInSecond = R.includes(ticket.segments[1].stops.length, transfers);
+    const matchDefaultMax = R.includes(999, transfers);
+    return (mathInFirst && matchInSecond) || matchDefaultMax;
+  };
+
+  const getConditions = R.pipe(
     R.filter(isChecked),
-    R.map(createCondition),
-    R.anyPass(),
+    R.pluck('countTransfer'),
+    createConditions,
   );
-  const filteredTickets = R.filter(getUnionCondition(checkBoxs), testTickets);
+  const filteredTickets = R.filter(getConditions(checkBoxs), tickets);
 
   return (
     <div className={styles.group__items}>
