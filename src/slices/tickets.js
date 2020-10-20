@@ -22,8 +22,7 @@ export const getTickets = createAsyncThunk(
         return tickets;
       } catch (error) {
         console.log('iter -> error', error);
-        // return iter(false, acc);
-        return acc;
+        return iter(true, acc);
       }
     };
 
