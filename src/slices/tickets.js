@@ -37,9 +37,6 @@ const slice = createSlice({
   name: 'tickets',
   initialState: [],
   reducers: {
-    addChannel(state, { payload: { data: { attributes } } }) {
-      state.entities.push(attributes);
-    },
   },
   extraReducers: {
     [getTickets.fulfilled]: (state, { payload }) => {

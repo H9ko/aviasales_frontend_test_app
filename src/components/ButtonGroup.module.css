@@ -1,19 +1,41 @@
+.btn__reset {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .btn_group {
-  border: 1px solid #DFE5EC;
-  border-radius: 5px;
   display: flex;
   margin-bottom: 20px;
 }
 
 .btn {
+  border: 1px solid #DFE5EC;
   flex: 1 0 auto;
   padding: 15px 0;
   text-align: center;
   background-color: white;
 }
+.btn:focus{
+  outline: none; 
+}
+.btn:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-right: none;
+}
+.btn:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px; 
+  border-left: none;
+}
 
-.btn:hover {
-  border-radius: 5px;
+.btn_checked {
+  
   background-color: #2196F3;
   color: white;
 }
+

@@ -5,11 +5,10 @@ import { actions } from '../slices';
 import styles from './CheckBox.module.css';
 
 const CheckBox = ({ name }) => {
-  const { checked, text } = useSelector((state) => state.filters.checkBoxs
+  const { checked, text } = useSelector((state) => state.displayConditions.checkBoxs
     .find((el) => el.name === name));
   const dispatch = useDispatch();
   const handleChange = (e) => {
-    console.log('handleChange -> e.target', e.target);
     dispatch(actions.changeCheckBox({ name: e.target.name, checked: e.target.checked }));
   };
   return (

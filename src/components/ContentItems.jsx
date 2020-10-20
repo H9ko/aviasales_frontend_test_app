@@ -4,9 +4,21 @@ import * as R from 'ramda';
 import ContentItem from './ContentItem';
 import styles from './ContentItems.module.css';
 
+const durationFlight = R.pipe(
+  R.prop('segments'),
+  R.map(R.prop('duration')),
+  R.sum,
+);
+
+const sorts = {
+  cheapest: [R.ascend(R.prop('price'))],
+  quickest: [R.ascend(durationFlight),
+  ],
+};
 const ContentItems = () => {
   const tickets = useSelector((state) => state.tickets.slice(0, 5));
-  const checkBoxs = useSelector((state) => state.filters.checkBoxs);
+  const checkBoxs = useSelector((state) => state.displayConditions.checkBoxs);
+  const sort = useSelector((state) => state.displayConditions.sort);
 
   const isChecked = R.propEq('checked', true);
   const createConditions = (transfers) => (ticket) => {
@@ -23,9 +35,11 @@ const ContentItems = () => {
   );
   const filteredTickets = R.filter(getConditions(checkBoxs), tickets);
 
+  const sortedTickets = R.sortWith(sorts[sort], filteredTickets);
+
   return (
     <div className={styles.group__items}>
-      {filteredTickets.map((ticket) => <ContentItem key={ticket.toString()} ticket={ticket} />)}
+      {sortedTickets.map((ticket) => <ContentItem key={ticket.toString()} ticket={ticket} />)}
     </div>
   );
 };

@@ -1,20 +1,20 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 import tickets, { actions as ticketsActions, getTickets } from './tickets';
-import filters, { actions as filtersActions } from './filters';
+import displayConditions, { actions as displayConditionsActions } from './displayConditions';
 // import channels, { actions as channelsActions, asyncActions as channelsAsyncActions } from './channels';
 // import modals, { actions as modalsActions } from './modals';
 
 export default combineReducers({
   tickets,
-  filters,
+  displayConditions,
   // channels,
   // modals,
 });
 
 const actions = {
   ...ticketsActions,
-  ...filtersActions,
+  ...displayConditionsActions,
   // ...channelsActions,
   // ...modalsActions,
 };

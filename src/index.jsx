@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import reducers from './slices';
+import reducers, { asyncActions } from './slices';
 
 const app = () => {
   const preloadedState = {
@@ -17,7 +17,8 @@ const app = () => {
     devTools: process.env.NODE_ENV !== 'production',
     preloadedState,
   });
-
+  const { dispatch } = store;
+  dispatch(asyncActions.getTickets());
   ReactDOM.render(
     <Provider store={store}>
       <App />
@@ -30,5 +31,4 @@ const app = () => {
   // Learn more about service workers: https://bit.ly/CRA-PWA
   serviceWorker.unregister();
 };
-
 app();

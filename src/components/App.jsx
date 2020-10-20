@@ -7,7 +7,7 @@ import ButtonGroup from './ButtonGroup';
 import ContentItems from './ContentItems';
 
 function App() {
-  const checkBoxs = useSelector((state) => state.filters.checkBoxs);
+  const checkBoxs = useSelector((state) => state.displayConditions.checkBoxs);
   return (
     <div className="page">
       <div className="header">

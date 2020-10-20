@@ -1,8 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
+import * as R from 'ramda';
 
 const slice = createSlice({
-  name: 'filters',
+  name: 'displayConditions',
   initialState: {
     checkBoxs: [
       {
@@ -36,14 +37,16 @@ const slice = createSlice({
         countTransfer: 3,
       },
     ],
+    sort: 'cheapest',
   },
   reducers: {
-    changeCheckBox: {
-      reducer: (state, action) => {
-        const curentBox = state.checkBoxs.find((el) => el.name === action.payload.name);
-        curentBox.checked = action.payload.checked;
-      },
-      prepare: (payload) => ({ payload }),
+    changeCheckBox(state, action) {
+      const curentBox = state.checkBoxs.find((el) => el.name === action.payload.name);
+      curentBox.checked = action.payload.checked;
+    },
+    setSort(state, { payload }) {
+      const updatedState = R.assoc('sort', payload, state);
+      return updatedState;
     },
   },
 });
