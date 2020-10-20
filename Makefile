@@ -2,6 +2,7 @@ install:
 	npm install
 
 build:
+	npm install
 	rm -rf build
 	npm run build
 
