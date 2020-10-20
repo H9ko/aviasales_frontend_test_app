@@ -42,6 +42,12 @@ body {
   flex-grow: 1;
   margin: 0 2.5%;
 }
+.loader {
+  padding-top: 50px;
+  display: flex;
+  justify-content: center;
+
+}
 
 
 

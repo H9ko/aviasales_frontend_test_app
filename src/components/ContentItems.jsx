@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import ContentItem from './ContentItem';
 import styles from './ContentItems.module.css';
 
-const durationFlight = R.pipe(
+const durationFlights = R.pipe(
   R.prop('segments'),
   R.map(R.prop('duration')),
   R.sum,
@@ -12,11 +12,11 @@ const durationFlight = R.pipe(
 
 const sorts = {
   cheapest: [R.ascend(R.prop('price'))],
-  quickest: [R.ascend(durationFlight),
+  quickest: [R.ascend(durationFlights),
   ],
 };
 const ContentItems = () => {
-  const tickets = useSelector((state) => state.tickets.slice(0, 5));
+  const tickets = useSelector((state) => state.tickets.tickets.slice(0, 5));
   const checkBoxs = useSelector((state) => state.displayConditions.checkBoxs);
   const sort = useSelector((state) => state.displayConditions.sort);
 
@@ -39,7 +39,8 @@ const ContentItems = () => {
 
   return (
     <div className={styles.group__items}>
-      {sortedTickets.map((ticket) => <ContentItem key={ticket.toString()} ticket={ticket} />)}
+      {/* eslint-disable-next-line react/no-array-index-key */}
+      {sortedTickets.map((ticket, index) => <ContentItem key={`${ticket.price}${index}`} ticket={ticket} />)}
     </div>
   );
 };
