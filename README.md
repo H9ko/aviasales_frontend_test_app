@@ -3,17 +3,16 @@
 
 Проект на фреймворке React с иcпользованием Redux .  Redux с redux tollkit. Использована функциональная библиотека Ramda. CSS с использованием css modules.  Стек технологий : React, Redux-tolkit, Ramda
 
-
-  
-    
-      
+<br />
+<br />
 <p align="center">
     <img src="https://user-images.githubusercontent.com/57991929/97649999-c68dc480-1a69-11eb-9214-1fd97cd1872d.png" width="800" title="profile">
-  <br>
 </p>
-
+<br />
+<br />
 ## <a href="https://aviasalesapp.herokuapp.com/">Демо версия приложения</a>
-
+<br />
+<br />
 ## Установка и запуск
 ### `make install`
 Установить все необходимые зависимости
