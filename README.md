@@ -1,18 +1,22 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Приложение выдачи билетов — с фильтрами и сортировкой
+
 
 Проект на фреймворке React с иcпользованием Redux .  Redux с redux tollkit. Использована функциональная библиотека Ramda. CSS с использованием css modules.  Стек технологий : React, Redux-tolkit, Ramda
 
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/57991929/97649999-c68dc480-1a69-11eb-9214-1fd97cd1872d.png" width="1024" title="profile">
+  <br>
+</p>
 
-# aviasales_frontend_test_app
-https://aviasalesapp.herokuapp.com/
 
-## Available Scripts
 
-In the project directory, you can run:
+
+## Установка и запуск
+### `make install`
+Установить все необходимые зависимости
 ### `make start`
+Запустить приложение в режиме разработки.<br />
+Открыть [http://localhost:3000](http://localhost:3000) для просмотра в браузере
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### <a href="https://aviasalesapp.herokuapp.com/">Демо версия приложения</a>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
