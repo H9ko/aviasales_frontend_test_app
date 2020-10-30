@@ -9,7 +9,7 @@ import ButtonGroup from './ButtonGroup';
 import ContentItems from './ContentItems';
 
 function App() {
-  const checkBoxs = useSelector((state) => state.displayConditions.checkBoxs);
+  const transfers = useSelector((state) => state.conditions.transfers);
   const loading = useSelector((state) => state.tickets.loading);
 
   return (
@@ -20,7 +20,16 @@ function App() {
       <div className="main">
         <div className="main__aside">
           <div className="main__title">КОЛИЧЕСТВО ПЕРЕСАДОК</div>
-          {checkBoxs.map(({ name }) => <CheckBox key={name} name={name} />)}
+          {transfers.map(({
+            id, name, checked, text,
+          }) => (
+            <CheckBox
+              key={id}
+              name={name}
+              checked={checked}
+              text={text}
+            />
+          ))}
         </div>
         <div className="main__content">
           <ButtonGroup />

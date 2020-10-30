@@ -1,14 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Axios from 'axios';
-import * as R from 'ramda';
+import { assoc, pipe } from 'ramda';
 import routes from '../routes';
 
 export const getTickets = createAsyncThunk(
   'getTickets',
   async () => {
     const { data: { searchId } } = await Axios.get(routes.searchIdPath());
-    console.log(searchId);
     const getPartTickets = () => Axios.get(routes.ticketsPath(searchId));
 
     const iter = async (end, acc) => {
@@ -18,7 +17,7 @@ export const getTickets = createAsyncThunk(
       try {
         const { data: { tickets, stop } } = await getPartTickets();
         console.log('iter -> tickets', tickets);
-        // return iter(stop, [...acc, ...tickets]);
+        // return iter(stop, [...acc, ...tickets]); загрузка всего списка
         return tickets;
       } catch (error) {
         console.log('iter -> error', error);
@@ -37,16 +36,16 @@ export const getTickets = createAsyncThunk(
 const slice = createSlice({
   name: 'tickets',
   initialState: {
-    tickets: [],
+    data: [],
     loading: false,
   },
   reducers: {
   },
   extraReducers: {
-    [getTickets.pending]: (state) => (R.assoc('loading', true, state)),
-    [getTickets.fulfilled]: (state, { payload }) => R.pipe(
-      R.assoc('tickets', payload),
-      R.assoc('loading', false),
+    [getTickets.pending]: (state) => (assoc('loading', true, state)),
+    [getTickets.fulfilled]: (state, { payload }) => pipe(
+      assoc('data', payload),
+      assoc('loading', false),
     )(state),
   },
 });

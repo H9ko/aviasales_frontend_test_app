@@ -1,41 +1,45 @@
+import {
+  ascend, filter, includes, map, pipe, pluck, prop, propEq, sortWith, sum,
+} from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import * as R from 'ramda';
 import ContentItem from './ContentItem';
 import styles from './ContentItems.module.css';
 
-const durationFlights = R.pipe(
-  R.prop('segments'),
-  R.map(R.prop('duration')),
-  R.sum,
+const durationFlights = pipe(
+  prop('segments'),
+  map(prop('duration')),
+  sum,
+);
+const isChecked = propEq('checked', true);
+
+const createConditions = (transfers) => (ticket) => {
+  const [flightTo, flightBack] = ticket.segments;
+  const matсhWithTo = includes(flightTo.stops.length, transfers);
+  const matchWithBack = includes(flightBack.stops.length, transfers);
+  const matchWithAll = includes('all', transfers);
+  return (matсhWithTo && matchWithBack) || matchWithAll;
+};
+
+const getConditions = pipe(
+  filter(isChecked),
+  pluck('numberTransfers'),
+  createConditions,
 );
 
 const sorts = {
-  cheapest: [R.ascend(R.prop('price'))],
-  quickest: [R.ascend(durationFlights),
+  cheapest: [ascend(prop('price'))],
+  quickest: [ascend(durationFlights),
   ],
 };
+
 const ContentItems = () => {
-  const tickets = useSelector((state) => state.tickets.tickets.slice(0, 5));
-  const checkBoxs = useSelector((state) => state.displayConditions.checkBoxs);
-  const sort = useSelector((state) => state.displayConditions.sort);
+  const tickets = useSelector((state) => state.tickets.data.slice(0, 5));
+  const transfers = useSelector((state) => state.conditions.transfers);
+  const sort = useSelector((state) => state.conditions.sort);
 
-  const isChecked = R.propEq('checked', true);
-  const createConditions = (transfers) => (ticket) => {
-    const mathInFirst = R.includes(ticket.segments[0].stops.length, transfers);
-    const matchInSecond = R.includes(ticket.segments[1].stops.length, transfers);
-    const matchDefaultMax = R.includes(999, transfers);
-    return (mathInFirst && matchInSecond) || matchDefaultMax;
-  };
-
-  const getConditions = R.pipe(
-    R.filter(isChecked),
-    R.pluck('countTransfer'),
-    createConditions,
-  );
-  const filteredTickets = R.filter(getConditions(checkBoxs), tickets);
-
-  const sortedTickets = R.sortWith(sorts[sort], filteredTickets);
+  const filteredTickets = filter(getConditions(transfers), tickets);
+  const sortedTickets = sortWith(sorts[sort], filteredTickets);
 
   return (
     <div className={styles.group__items}>

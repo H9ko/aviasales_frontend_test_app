@@ -1,51 +1,56 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import * as R from 'ramda';
+import { assoc } from 'ramda';
 
 const slice = createSlice({
-  name: 'displayConditions',
+  name: 'conditions',
   initialState: {
-    checkBoxs: [
+    transfers: [
       {
+        id: 1,
         text: 'Все',
         name: 'all',
         checked: true,
-        countTransfer: 999,
+        numberTransfers: 'all',
       },
       {
+        id: 2,
         text: 'Без пересадок',
         name: 'none',
         checked: false,
-        countTransfer: 0,
+        numberTransfers: 0,
       },
       {
+        id: 3,
         text: '1 пересадка',
         name: '1transfer',
         checked: false,
-        countTransfer: 1,
+        numberTransfers: 1,
       },
       {
+        id: 4,
         text: '2 пересадки',
         name: '2transfer',
         checked: false,
-        countTransfer: 2,
+        numberTransfers: 2,
       },
       {
+        id: 5,
         text: '3 пересадки',
         name: '3transfer',
         checked: false,
-        countTransfer: 3,
+        numberTransfers: 3,
       },
     ],
     sort: 'cheapest',
   },
   reducers: {
-    changeCheckBox(state, action) {
-      const curentBox = state.checkBoxs.find((el) => el.name === action.payload.name);
-      curentBox.checked = action.payload.checked;
+    setChecked(state, { payload: { name, checked } }) {
+      const curentBox = state.transfers.find((el) => el.name === name);
+      curentBox.checked = checked;
     },
     setSort(state, { payload }) {
-      const updatedState = R.assoc('sort', payload, state);
+      const updatedState = assoc('sort', payload, state);
       return updatedState;
     },
   },

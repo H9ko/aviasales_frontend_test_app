@@ -6,7 +6,7 @@ import styles from './ButtonGroup.module.css';
 
 const ButtonGroup = () => {
   const dispatch = useDispatch();
-  const sort = useSelector((state) => state.displayConditions.sort);
+  const sort = useSelector((state) => state.conditions.sort);
   const handleClick = (typeSort) => () => {
     dispatch(actions.setSort(typeSort));
   };
