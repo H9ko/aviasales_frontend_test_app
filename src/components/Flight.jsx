@@ -1,6 +1,6 @@
 import React from 'react';
 import { DateTime, Duration } from 'luxon';
-import css from './Flight.module.css';
+import styles from './Flight.module.css';
 
 const Flight = ({ flight }) => {
   const {
@@ -13,18 +13,18 @@ const Flight = ({ flight }) => {
   const formatTime = `${dataStart.toFormat("hh':'mm")} - ${dataEnd.toFormat("hh':'mm")}`;
   const formatTimeLocale = dataDuration.toFormat("hh'ч 'mm'м'");
   return (
-    <div className={css.row}>
-      <div className={css.column}>
-        <div className={css.title}>{`${origin} - ${destination}`}</div>
-        <div className={css.content}>{formatTime}</div>
+    <div className={styles.row}>
+      <div className={styles.column}>
+        <div className={styles.title}>{`${origin} - ${destination}`}</div>
+        <div className={styles.content}>{formatTime}</div>
       </div>
-      <div className={css.column}>
-        <div className={css.title}>В ПУТИ</div>
-        <div className={css.content}>{formatTimeLocale}</div>
+      <div className={styles.column}>
+        <div className={styles.title}>В ПУТИ</div>
+        <div className={styles.content}>{formatTimeLocale}</div>
       </div>
-      <div className={css.column}>
-        <div className={css.title}>{`${stops.length} ПЕРЕСАДКИ`}</div>
-        <div className={css.content}>{stops.join(',')}</div>
+      <div className={styles.column}>
+        <div className={styles.title}>{`${stops.length} ПЕРЕСАДКИ`}</div>
+        <div className={styles.content}>{stops.join(',')}</div>
       </div>
     </div>
   );

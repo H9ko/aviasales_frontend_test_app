@@ -8,6 +8,7 @@ const CheckBox = ({ name, checked, text }) => {
   const dispatch = useDispatch();
   const handleChange = (e) => {
     dispatch(actions.setChecked({ name: e.target.name, checked: e.target.checked }));
+    dispatch(actions.updateDisplayTickets());
   };
   return (
     <label className={styles.check}>

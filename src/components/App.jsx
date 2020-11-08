@@ -7,9 +7,10 @@ import { ReactComponent as Logo } from '../assets/logo.svg';
 import CheckBox from './CheckBox';
 import ButtonGroup from './ButtonGroup';
 import ContentItems from './ContentItems';
+import Pagination from './Pagination';
 
 function App() {
-  const transfers = useSelector((state) => state.conditions.transfers);
+  const transfers = useSelector((state) => state.tickets.conditions.transfers);
   const loading = useSelector((state) => state.tickets.loading);
 
   return (
@@ -33,6 +34,7 @@ function App() {
         </div>
         <div className="main__content">
           <ButtonGroup />
+          <Pagination />
           {loading && (
           <div className="loader">
             <FontAwesomeIcon icon={faSpinner} size="6x" fixedWidth color="#2196F3" spin />

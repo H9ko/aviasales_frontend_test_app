@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
 import App from './components/App';
-import reducers, { asyncActions } from './slices';
+import reducers, { actions, asyncActions } from './slices';
 
 const app = () => {
   const preloadedState = {
@@ -16,8 +16,16 @@ const app = () => {
     devTools: process.env.NODE_ENV !== 'production',
     preloadedState,
   });
-  const { dispatch } = store;
-  dispatch(asyncActions.getTickets());
+  const { dispatch, getState } = store;
+  store.subscribe(()=>{
+    
+  })
+  dispatch(asyncActions.getTickets()).then(() => {
+    dispatch(actions.setSortTickets(getState().tickets.conditions.sort));
+    dispatch(actions.setCurentPage(1));
+    dispatch(actions.updateDisplayTickets());
+  });
+
   ReactDOM.render(
     <Provider store={store}>
       <App />
