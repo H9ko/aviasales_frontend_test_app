@@ -78,7 +78,21 @@ const slice = createSlice({
         ...state,
         currentPage: page,
       };
+    // ****** Тут после выполнения должна вызываться  dispatch(updateDisplayTickets())
     },
+
+    // функция которая должна быть но приходится дублировать ее код внутри других
+    // updateTickets(state, { payload }) {
+    //   const {
+    //     ids, entities, conditions: { transfers },
+    //   } = state;
+    //   const sort = payload;
+    //   const tickets = ids.map((id) => entities[id]);
+    //   const filteredTickets = filter(getConditions(transfers), tickets);
+    //   const sortedTickets = sortWith(sorts[sort], filteredTickets);
+    //   ticketsAdapter.setAll(state, sortedTickets);
+    //   ******** после выполнения должна вызываться  dispatch(updateDisplayTickets())
+    // },
     setSortTickets(state, { payload }) {
       const {
         ids, entities, conditions: { transfers },
@@ -86,10 +100,10 @@ const slice = createSlice({
       const sort = payload;
       const tickets = ids.map((id) => entities[id]);
       const filteredTickets = filter(getConditions(transfers), tickets);
-      console.log('setSortTickets -> filteredTickets', filteredTickets);
-      console.log('setSortTickets -> sort', sort);
       const sortedTickets = sortWith(sorts[sort], filteredTickets);
       ticketsAdapter.setAll(state, sortedTickets);
+      // После сортировки весь массив данных обновлется в функции которая должна просто установить новый флаг сортировки
+      // Хочу  после исполнения setSortTickets автоматом тригернуть dispatch(updateTickets())
       state.conditions.sort = sort;
     },
     setChecked(state, { payload: { name, checked } }) {
@@ -100,13 +114,21 @@ const slice = createSlice({
   extraReducers: {
     [getTickets.pending]: (state) => ({ ...state, loading: true }),
     [getTickets.fulfilled]: (state, { payload }) => {
+      // Шаг 1 здесь я получил общий массив данных и мне нужно их записать.
+      //  Но запишутся они неотсортированные. Это стация инициализации. Поэтому вызов происходит так
+      // dispatch(asyncActions.getTickets()).then(() => {
+      //   dispatch(actions.setSortTickets(getState().tickets.conditions.sort));
+      //   dispatch(actions.setCurentPage(1));
+      //   dispatch(actions.updateDisplayTickets());
+      // });
+      // Хочется  убрать вот этоу последовательность ручных вызывов
+
       ticketsAdapter.setAll(state, payload);
       state.totalPage = Math.ceil(payload.length / state.itemsPerPage);
       state.loading = false;
     },
   },
 });
-
 
 export const {
   selectById: selectTicketsById,
