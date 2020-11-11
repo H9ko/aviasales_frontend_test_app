@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
 import { actions } from '../slices';
 import styles from './Pagination.module.css';
+import { selectPagesTickets } from '../slices/tickets';
 
 const Pagination = () => {
-  const pages = useSelector((state) => state.tickets.pages);
+  const pages = useSelector(selectPagesTickets);
+  console.log('Pagination -> pages', pages);
   const currentPage = useSelector((state) => state.tickets.currentPage);
   const dispatch = useDispatch();
   const gethandleClick = (pageSymbol) => {
@@ -13,17 +15,14 @@ const Pagination = () => {
       case pageSymbol === '<<':
         return () => {
           dispatch(actions.setCurentPage(currentPage - 2));
-          dispatch(actions.updateDisplayTickets());
         };
       case pageSymbol === '>>':
         return () => {
           dispatch(actions.setCurentPage(currentPage + 2));
-          dispatch(actions.updateDisplayTickets());
         };
       case typeof pageSymbol === 'number':
         return () => {
           dispatch(actions.setCurentPage(pageSymbol));
-          dispatch(actions.updateDisplayTickets());
         };
       default:
         console.log('error: undefined pageSymbol: ', pageSymbol);
@@ -33,12 +32,11 @@ const Pagination = () => {
   return (
     <ul className={styles.pagination}>
       {pages.map((page) => {
-        const d = '';
         const className = cn(`x-reset-button ${styles.page_link}`, {
           [`${styles.active}`]: page === currentPage,
         });
         return (
-          <li className={styles.page_item}>
+          <li key={page} className={styles.page_item}>
             <button type="button" className={className} onClick={gethandleClick(page)}>{page}</button>
           </li>
         );

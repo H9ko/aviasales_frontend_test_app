@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
+import {
+  createSlice, createAsyncThunk, createEntityAdapter, createSelector,
+} from '@reduxjs/toolkit';
 import Axios from 'axios';
 import {
   filter, sortWith,
 } from 'ramda';
 import {
-  getConditions, getPages, logImmer, sorts,
+  getConditions, getPages, sorts,
 } from '../utils';
 import { conditions } from '../utils/data';
 import routes from '../routes';
@@ -47,88 +49,58 @@ export const getTickets = createAsyncThunk(
 const slice = createSlice({
   name: 'tickets',
   initialState: ticketsAdapter.getInitialState({
-    currentDisplayTickets: [],
     currentPage: 1,
-    pages: [],
-    totalPage: 0,
     itemsPerPage: 10,
     loading: false,
     conditions,
   }),
   reducers: {
-    updateDisplayTickets(state) {
-      const {
-        totalPage, itemsPerPage, entities, currentPage,
-      } = state;
-      const startId = currentPage * itemsPerPage - itemsPerPage;
-      const endId = currentPage * itemsPerPage;
-      const currentDisplayTicketsIds = state.ids.slice(startId, endId);
-      const currentDisplayTickets = currentDisplayTicketsIds.map((id) => entities[id]);
-      const pages = getPages(currentPage, totalPage);
-
-      return {
-        ...state,
-        pages,
-        currentDisplayTickets,
-      };
-    },
     setCurentPage(state, { payload }) {
       const page = payload;
       return {
         ...state,
         currentPage: page,
       };
-    // ****** Тут после выполнения должна вызываться  dispatch(updateDisplayTickets())
     },
-
-    // функция которая должна быть но приходится дублировать ее код внутри других
-    // updateTickets(state, { payload }) {
-    //   const {
-    //     ids, entities, conditions: { transfers },
-    //   } = state;
-    //   const sort = payload;
-    //   const tickets = ids.map((id) => entities[id]);
-    //   const filteredTickets = filter(getConditions(transfers), tickets);
-    //   const sortedTickets = sortWith(sorts[sort], filteredTickets);
-    //   ticketsAdapter.setAll(state, sortedTickets);
-    //   ******** после выполнения должна вызываться  dispatch(updateDisplayTickets())
-    // },
     setSortTickets(state, { payload }) {
-      const {
-        ids, entities, conditions: { transfers },
-      } = state;
       const sort = payload;
-      const tickets = ids.map((id) => entities[id]);
-      const filteredTickets = filter(getConditions(transfers), tickets);
-      const sortedTickets = sortWith(sorts[sort], filteredTickets);
-      ticketsAdapter.setAll(state, sortedTickets);
-      // После сортировки весь массив данных обновлется в функции которая должна просто установить новый флаг сортировки
-      // Хочу  после исполнения setSortTickets автоматом тригернуть dispatch(updateTickets())
       state.conditions.sort = sort;
     },
     setChecked(state, { payload: { name, checked } }) {
-      const curentBox = state.conditions.transfers.find((el) => el.name === name);
-      curentBox.checked = checked;
+      const transfers = (name === 'all')
+        ? state.conditions.transfers.map((el) => ({ ...el, checked }))
+        : state.conditions.transfers.map((el) => {
+          if (el.name === 'all') {
+            return { ...el, checked: false };
+          }
+          if (el.name === name) {
+            return { ...el, checked };
+          }
+          return el;
+        });
+      const result = {
+        ...state,
+        conditions: {
+          ...state.conditions,
+          transfers,
+        },
+      };
+      return result;
     },
   },
   extraReducers: {
     [getTickets.pending]: (state) => ({ ...state, loading: true }),
     [getTickets.fulfilled]: (state, { payload }) => {
-      // Шаг 1 здесь я получил общий массив данных и мне нужно их записать.
-      //  Но запишутся они неотсортированные. Это стация инициализации. Поэтому вызов происходит так
-      // dispatch(asyncActions.getTickets()).then(() => {
-      //   dispatch(actions.setSortTickets(getState().tickets.conditions.sort));
-      //   dispatch(actions.setCurentPage(1));
-      //   dispatch(actions.updateDisplayTickets());
-      // });
-      // Хочется  убрать вот этоу последовательность ручных вызывов
-
       ticketsAdapter.setAll(state, payload);
-      state.totalPage = Math.ceil(payload.length / state.itemsPerPage);
       state.loading = false;
     },
   },
 });
+export const selectSortTickets = (state) => state.tickets.conditions.sort;
+export const selectTransfersTickets = (state) => state.tickets.conditions.transfers;
+export const selectLoadingTickets = (state) => state.tickets.loading;
+export const selectItemsPerPage = (state) => state.tickets.itemsPerPage;
+export const selectCurrentPage = (state) => state.tickets.currentPage;
 
 export const {
   selectById: selectTicketsById,
@@ -138,6 +110,39 @@ export const {
   selectTotal: selectTotalTickets,
 } = ticketsAdapter.getSelectors((state) => state.tickets);
 
+export const selectFilteredSortedTickets = createSelector(
+  selectAllTickets,
+  selectSortTickets,
+  selectTransfersTickets,
+  (tickets, sort, transfers) => {
+    const filteredTickets = filter(getConditions(transfers), tickets);
+    const sortedTickets = sortWith(sorts[sort], filteredTickets);
+    return sortedTickets;
+  },
+);
+
+export const selectCurrentPageTickets = createSelector(
+  selectFilteredSortedTickets,
+  selectCurrentPage,
+  selectItemsPerPage,
+  (tickets, currentPage, itemsPerPage) => {
+    const startId = currentPage * itemsPerPage - itemsPerPage;
+    const endId = currentPage * itemsPerPage;
+    const currentDisplayTickets = tickets.slice(startId, endId);
+    return currentDisplayTickets;
+  },
+);
+export const selectTotalPage = createSelector(
+  selectFilteredSortedTickets,
+  selectItemsPerPage,
+  (filteredSortedTickets, itemsPerPage) => Math.ceil(filteredSortedTickets.length / itemsPerPage),
+);
+
+export const selectPagesTickets = createSelector(
+  selectCurrentPage,
+  selectTotalPage,
+  (currentPage, totalPage) => getPages(currentPage, totalPage),
+);
 export const asyncActions = { getTickets };
 export const { actions } = slice;
 export default slice.reducer;

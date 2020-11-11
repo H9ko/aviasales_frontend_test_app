@@ -1,7 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styles from './ContentItems.module.css';
 import Flight from './Flight';
+import Pagination from './Pagination';
 
 const ContentItem = ({ ticket }) => (
   <div className={styles.item}>
@@ -20,15 +20,12 @@ const ContentItem = ({ ticket }) => (
   </div>
 );
 
-const ContentItems = () => {
-  const tickets = useSelector((state) => state.tickets.currentDisplayTickets);
-  console.log(tickets);
-  return (
+const ContentItems = ({ tickets }) => (
+  <>
+    <Pagination />
     <div className={styles.group__items}>
-      {/* eslint-disable-next-line react/no-array-index-key */}
-      {tickets.map((ticket, index) => <ContentItem key={`${ticket.price}${index}`} ticket={ticket} />)}
+      {tickets.map((ticket) => <ContentItem key={`${ticket.id}`} ticket={ticket} />)}
     </div>
-  );
-};
-
+  </>
+);
 export default ContentItems;

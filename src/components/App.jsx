@@ -7,12 +7,13 @@ import { ReactComponent as Logo } from '../assets/logo.svg';
 import CheckBox from './CheckBox';
 import ButtonGroup from './ButtonGroup';
 import ContentItems from './ContentItems';
-import Pagination from './Pagination';
+import { selectCurrentPageTickets, selectLoadingTickets, selectTransfersTickets } from '../slices/tickets';
 
 function App() {
-  const transfers = useSelector((state) => state.tickets.conditions.transfers);
-  const loading = useSelector((state) => state.tickets.loading);
-
+  const transfers = useSelector(selectTransfersTickets);
+  console.log('App -> transfers', transfers);
+  const loading = useSelector(selectLoadingTickets);
+  const tickets = useSelector(selectCurrentPageTickets);
   return (
     <div className="page">
       <div className="header">
@@ -34,13 +35,14 @@ function App() {
         </div>
         <div className="main__content">
           <ButtonGroup />
-          <Pagination />
           {loading && (
           <div className="loader">
             <FontAwesomeIcon icon={faSpinner} size="6x" fixedWidth color="#2196F3" spin />
           </div>
           )}
-          <ContentItems />
+          {!loading && tickets.length === 0
+            ? <div className="x-text-centr"> По выбранным фильтрам совпадений нет</div>
+            : <ContentItems tickets={tickets} />}
         </div>
       </div>
     </div>
