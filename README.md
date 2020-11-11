@@ -8,7 +8,7 @@
 Проект на фреймворке React с иcпользованием Redux .  Redux с redux tollkit. Использована функциональная библиотека Ramda. CSS с использованием css modules.  Стек технологий : React, Redux-tolkit, Ramda
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/57991929/97649999-c68dc480-1a69-11eb-9214-1fd97cd1872d.png" width="800" title="profile">
+    <img src="https://user-images.githubusercontent.com/57991929/98749953-d55f6a00-23cd-11eb-8c5b-b8703d789b65.png" width="800" title="profile">
 </p>
 
 ## Установка и запуск
